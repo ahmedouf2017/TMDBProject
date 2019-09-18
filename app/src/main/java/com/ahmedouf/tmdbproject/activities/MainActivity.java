@@ -108,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
                     moviesList = movie.getResults();
                 }
                 fragment.addMovies(moviesList);
-                page = page + 1;
+                page +=1;
                 Log.d("Page : ", String.valueOf(page));
                 progressBar.setVisibility(View.GONE);
             }

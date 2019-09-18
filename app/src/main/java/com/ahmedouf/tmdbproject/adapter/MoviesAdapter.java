@@ -21,6 +21,7 @@ import com.ahmedouf.tmdbproject.fragments.MovieDetailsFragment;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MyOwnHolder> {
@@ -32,8 +33,8 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MyOwnHolde
     @NonNull
     @Override
     public MyOwnHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        LayoutInflater myInflator = LayoutInflater.from(parent.getContext());
-        View myOwnView = myInflator.inflate(R.layout.movies_overview, parent, false);
+        LayoutInflater myInflater = LayoutInflater.from(parent.getContext());
+        View myOwnView = myInflater.inflate(R.layout.movies_overview, parent, false);
         return new MyOwnHolder(myOwnView);
     }
 
@@ -69,26 +70,31 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MyOwnHolde
     }
 
     public void filter(@Nullable String date) {
-        filterDate=date;
+        filterDate = date;
         moviesPassedFiltered.clear();
         if (TextUtils.isEmpty(date)) {
             moviesPassedFiltered.addAll(moviesPassed);
         } else {
             for ( Movie.ResultsBean movie : moviesPassed ) {
-                if (movie.getRelease_date().contains(date)) {
-                    moviesPassedFiltered.add(movie);
+                if (!moviesPassedFiltered.contains(movie)) {
+                    if (movie.getRelease_date().contains(date)) {
+                        moviesPassedFiltered.add(movie);
+                    }
                 }
             }
         }
+        Log.d("MoviesPassedFilter:", String.valueOf(moviesPassed.size()));
+
+        Log.d("MoviesPassedFilteredF:", String.valueOf(moviesPassedFiltered.size()));
+
         notifyDataSetChanged();
     }
 
 
     public void addAll(List<Movie.ResultsBean> movies) {
         moviesPassed.addAll(movies);
-        moviesPassedFiltered.addAll(movies);
+        Log.d("MoviesPassed:", String.valueOf(moviesPassed.size()));
         filter(filterDate);
-        notifyItemRangeInserted(moviesPassed.size() - movies.size(), movies.size());
     }
 
     class MyOwnHolder extends RecyclerView.ViewHolder {
@@ -98,7 +104,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MyOwnHolde
         MyOwnHolder(@NonNull View itemView) {
             super(itemView);
             movieTitleOverview = itemView.findViewById(R.id.moiveTitleOverview);
-            movieReleaseDateOverview =itemView.findViewById(R.id.moiveReleaseDateOverview);
+            movieReleaseDateOverview = itemView.findViewById(R.id.moiveReleaseDateOverview);
             movieRatingOverview = itemView.findViewById(R.id.movieRatingOverview);
             moviePoster = itemView.findViewById(R.id.moviePoster);
         }

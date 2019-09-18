@@ -7,6 +7,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
@@ -36,7 +38,7 @@ import java.util.Locale;
 public class HomeFragment extends Fragment implements MonthYearPickerDialog.OnDateSetListener {
     private RecyclerView moviesRecyclerView;
     private MoviesAdapter moviesOverviewAdapter;
-
+    private boolean loadingPage;
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -104,6 +106,7 @@ public class HomeFragment extends Fragment implements MonthYearPickerDialog.OnDa
         moviesOverviewAdapter = new MoviesAdapter();
         Log.d("Adapter set", "Adapter set");
         moviesRecyclerView.setAdapter(moviesOverviewAdapter);
+        GridLayoutManager layoutManager = (GridLayoutManager) moviesRecyclerView.getLayoutManager();
         moviesRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
@@ -123,6 +126,7 @@ public class HomeFragment extends Fragment implements MonthYearPickerDialog.OnDa
     }
 
     public void addMovies(List<Movie.ResultsBean> movies) {
+        loadingPage = false;
         if (moviesOverviewAdapter != null) {
             moviesOverviewAdapter.addAll(movies);
         }
@@ -135,6 +139,8 @@ public class HomeFragment extends Fragment implements MonthYearPickerDialog.OnDa
     }
 
     private void loadPage() {
+        if (loadingPage) return;
+        loadingPage = true;
         ((MainActivity) getActivity()).checkNetwork();
     }
 

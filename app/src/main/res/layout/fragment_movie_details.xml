@@ -15,6 +15,26 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent">
 
+        <ProgressBar
+            android:id="@+id/progressBar2"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="@+id/imageMovieDetails"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/imageMovieDetails" />
+
+        <ProgressBar
+            android:id="@+id/progressBar3"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/movieTitleMovieDetails"
+            app:layout_constraintEnd_toEndOf="@+id/posterMovieDetails"
+            app:layout_constraintStart_toStartOf="@+id/posterMovieDetails"
+            app:layout_constraintTop_toTopOf="@+id/posterMovieDetails" />
+
         <ImageView
             android:id="@+id/imageMovieDetails"
             android:layout_width="0dp"
@@ -33,11 +53,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
-            android:background="@drawable/poster_background"
             android:foregroundGravity="left"
             android:maxHeight="150dp"
+            android:minHeight="150dp"
+            android:minWidth="100dp"
             android:scaleType="fitXY"
             android:src="@drawable/img1"
+            android:background="@drawable/poster_background"
             app:layout_constrainedHeight="false"
             app:layout_constrainedWidth="false"
             app:layout_constraintBottom_toBottomOf="@+id/imageMovieDetails"
@@ -83,6 +105,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="TextView"
+            android:layout_marginTop="10dp"
             app:layout_constraintBottom_toBottomOf="@+id/posterMovieDetails"
             app:layout_constraintEnd_toStartOf="@+id/posterMovieDetails"
             app:layout_constraintStart_toStartOf="parent"
@@ -95,6 +118,7 @@
             android:drawableLeft="@drawable/ic_24px"
             android:drawablePadding="4dp"
             android:gravity="center_vertical"
+            android:layout_marginTop="10dp"
             android:text="TextView"
             app:layout_constraintBottom_toBottomOf="@+id/posterMovieDetails"
             app:layout_constraintEnd_toEndOf="parent"

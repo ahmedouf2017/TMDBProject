@@ -13,6 +13,7 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.ahmedouf.tmdbproject.models.Movie;
@@ -27,7 +28,7 @@ public class MovieDetailsFragment extends Fragment {
     private TextView movieTitleMovieDetails, votingRateMovieDetails, releaseDataMovieDate, movieDetailsTextView;
     private ImageView imageMovieDetails, posterMovieDetails;
     String url = "https://image.tmdb.org/t/p/w500";
-
+ProgressBar progressBar1,progressBar2;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -40,6 +41,8 @@ public class MovieDetailsFragment extends Fragment {
         movieDetailsTextView = view.findViewById(R.id.movieDetailsTextView);
         imageMovieDetails = view.findViewById(R.id.imageMovieDetails);
         posterMovieDetails = view.findViewById(R.id.posterMovieDetails);
+        progressBar1=view.findViewById(R.id.progressBar2);
+        progressBar2=view.findViewById(R.id.progressBar3);
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             Movie.ResultsBean movieToDisplay = (Movie.ResultsBean) bundle.get("data");
@@ -47,8 +50,16 @@ public class MovieDetailsFragment extends Fragment {
             votingRateMovieDetails.setText(String.format("Rating: %s \u2605", movieToDisplay.getVote_average()));
             releaseDataMovieDate.setText(movieToDisplay.getRelease_date());
             movieDetailsTextView.setText(movieToDisplay.getOverview());
-            Picasso.get().load(url + movieToDisplay.getPoster_path()).into(posterMovieDetails);
-            Picasso.get().load(url + movieToDisplay.getBackdrop_path()).into(imageMovieDetails);
+            if(movieToDisplay.getPoster_path()== null){
+                progressBar1.setVisibility(view.VISIBLE);
+            }else{
+                Picasso.get().load(url + movieToDisplay.getPoster_path()).into(posterMovieDetails);
+            }
+            if(movieToDisplay.getBackdrop_path()== null){
+                progressBar2.setVisibility(view.VISIBLE);
+            }else{
+                Picasso.get().load(url + movieToDisplay.getBackdrop_path()).into(imageMovieDetails);
+            }
         }
         return view;
     }
