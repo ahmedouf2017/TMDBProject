@@ -1,5 +1,6 @@
 package com.ahmedouf.tmdbproject.adapter;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -8,10 +9,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ahmedouf.tmdbproject.fragments.HomeFragment;
@@ -94,6 +97,9 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MyOwnHolde
     public void addAll(List<Movie.ResultsBean> movies) {
         moviesPassed.addAll(movies);
         Log.d("MoviesPassed:", String.valueOf(moviesPassed.size()));
+        if(movies==null){
+            Log.d("ALERT!!", "No more movies to display");
+        }
         filter(filterDate);
     }
 

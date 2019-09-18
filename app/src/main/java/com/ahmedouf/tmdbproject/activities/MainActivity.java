@@ -14,6 +14,7 @@ import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.ahmedouf.tmdbproject.models.Movie;
 import com.ahmedouf.tmdbproject.fragments.HomeFragment;
@@ -110,6 +111,9 @@ public class MainActivity extends AppCompatActivity {
                 fragment.addMovies(moviesList);
                 page +=1;
                 Log.d("Page : ", String.valueOf(page));
+                if(movie.getPage() >= movie.getTotal_pages()){
+                    Toast.makeText(getApplicationContext(),"No more movies to load",Toast.LENGTH_LONG).show();
+                }
                 progressBar.setVisibility(View.GONE);
             }
 
