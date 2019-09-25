@@ -3,6 +3,7 @@ package com.ahmedouf.tmdbproject.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Movie {
@@ -202,8 +203,54 @@ public class Movie {
         }
 
         @Override
-        public void writeToParcel(Parcel parcel, int i) {
-
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeDouble(this.popularity);
+            dest.writeInt(this.vote_count);
+            dest.writeByte(this.video ? (byte) 1 : (byte) 0);
+            dest.writeString(this.poster_path);
+            dest.writeInt(this.id);
+            dest.writeByte(this.adult ? (byte) 1 : (byte) 0);
+            dest.writeString(this.backdrop_path);
+            dest.writeString(this.original_language);
+            dest.writeString(this.original_title);
+            dest.writeString(this.title);
+            dest.writeDouble(this.vote_average);
+            dest.writeString(this.overview);
+            dest.writeString(this.release_date);
+            dest.writeList(this.genre_ids);
         }
+
+        public ResultsBean() {
+        }
+
+        protected ResultsBean(Parcel in) {
+            this.popularity = in.readDouble();
+            this.vote_count = in.readInt();
+            this.video = in.readByte() != 0;
+            this.poster_path = in.readString();
+            this.id = in.readInt();
+            this.adult = in.readByte() != 0;
+            this.backdrop_path = in.readString();
+            this.original_language = in.readString();
+            this.original_title = in.readString();
+            this.title = in.readString();
+            this.vote_average = in.readDouble();
+            this.overview = in.readString();
+            this.release_date = in.readString();
+            this.genre_ids = new ArrayList<Integer>();
+            in.readList(this.genre_ids, Integer.class.getClassLoader());
+        }
+
+        public static final Parcelable.Creator<ResultsBean> CREATOR = new Parcelable.Creator<ResultsBean>() {
+            @Override
+            public ResultsBean createFromParcel(Parcel source) {
+                return new ResultsBean(source);
+            }
+
+            @Override
+            public ResultsBean[] newArray(int size) {
+                return new ResultsBean[size];
+            }
+        };
     }
 }

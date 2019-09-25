@@ -7,6 +7,5 @@
     android:elevation="4dp"
     android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
     app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-    app:title="Latest movies from TMDB">
-
+    app:title="@string/now_playing">
 </androidx.appcompat.widget.Toolbar>

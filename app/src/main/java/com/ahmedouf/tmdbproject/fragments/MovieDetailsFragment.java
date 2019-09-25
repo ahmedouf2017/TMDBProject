@@ -27,41 +27,54 @@ import com.squareup.picasso.Picasso;
 public class MovieDetailsFragment extends Fragment {
     private TextView movieTitleMovieDetails, votingRateMovieDetails, releaseDataMovieDate, movieDetailsTextView;
     private ImageView imageMovieDetails, posterMovieDetails;
-    String url = "https://image.tmdb.org/t/p/w500";
-ProgressBar progressBar1,progressBar2;
+    private Bundle bundle;
+    private String url = "https://image.tmdb.org/t/p/w500";
+    private ProgressBar progressBar1, progressBar2;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_movie_details, container, false);
+
+        return inflater.inflate(R.layout.fragment_movie_details, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        initializeViews(view);
+        bundle = this.getArguments();
+        populateViews(view);
+
+    }
+
+    private void initializeViews(View view) {
         movieTitleMovieDetails = view.findViewById(R.id.movieTitleMovieDetails);
         votingRateMovieDetails = view.findViewById(R.id.votingRateMovieDetails);
         releaseDataMovieDate = view.findViewById(R.id.releaseDataMovieDate);
         movieDetailsTextView = view.findViewById(R.id.movieDetailsTextView);
         imageMovieDetails = view.findViewById(R.id.imageMovieDetails);
         posterMovieDetails = view.findViewById(R.id.posterMovieDetails);
-        progressBar1=view.findViewById(R.id.progressBar2);
-        progressBar2=view.findViewById(R.id.progressBar3);
-        Bundle bundle = this.getArguments();
+        progressBar1 = view.findViewById(R.id.progressBar2);
+        progressBar2 = view.findViewById(R.id.progressBar3);
+    }
+
+    private void populateViews(View view) {
         if (bundle != null) {
             Movie.ResultsBean movieToDisplay = (Movie.ResultsBean) bundle.get("data");
             movieTitleMovieDetails.setText(movieToDisplay.getTitle());
             votingRateMovieDetails.setText(String.format("Rating: %s \u2605", movieToDisplay.getVote_average()));
             releaseDataMovieDate.setText(movieToDisplay.getRelease_date());
             movieDetailsTextView.setText(movieToDisplay.getOverview());
-            if(movieToDisplay.getPoster_path()== null){
+            if (movieToDisplay.getPoster_path() == null) {
                 progressBar1.setVisibility(view.VISIBLE);
-            }else{
+            } else {
                 Picasso.get().load(url + movieToDisplay.getPoster_path()).into(posterMovieDetails);
             }
-            if(movieToDisplay.getBackdrop_path()== null){
+            if (movieToDisplay.getBackdrop_path() == null) {
                 progressBar2.setVisibility(view.VISIBLE);
-            }else{
+            } else {
                 Picasso.get().load(url + movieToDisplay.getBackdrop_path()).into(imageMovieDetails);
             }
         }
-        return view;
     }
 
     @Override

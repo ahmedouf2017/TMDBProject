@@ -1,7 +1,5 @@
 package com.ahmedouf.tmdbproject.adapter;
 
-import android.content.Context;
-import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,22 +7,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.ahmedouf.tmdbproject.fragments.HomeFragment;
+import com.ahmedouf.tmdbproject.callbacks.MovieFragmentData;
 import com.ahmedouf.tmdbproject.models.Movie;
 import com.ahmedouf.tmdbproject.R;
-import com.ahmedouf.tmdbproject.fragments.MovieDetailsFragment;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MyOwnHolder> {
@@ -32,6 +25,8 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MyOwnHolde
     private List<Movie.ResultsBean> moviesPassed = new ArrayList<>();
     private List<Movie.ResultsBean> moviesPassedFiltered = new ArrayList<>();
     private String filterDate;
+    MovieFragmentData<Movie.ResultsBean> callback;
+    private String category = "now_playing";
 
     @NonNull
     @Override
@@ -42,7 +37,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MyOwnHolde
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MoviesAdapter.MyOwnHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull MoviesAdapter.MyOwnHolder holder, final int position)  {
         holder.movieTitleOverview.setText(moviesPassedFiltered.get(position).getOriginal_title());
         holder.movieTitleOverview.setSelected(true);
         holder.movieRatingOverview.setText(String.format("Rating: %s \u2605", moviesPassedFiltered.get(position).getVote_average()));
@@ -52,19 +47,15 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MyOwnHolde
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openMovieFragment(view, position);
+                if (callback != null) {
+                    callback.movieClicked(moviesPassedFiltered.get(position));
+                }
             }
         });
     }
 
-    private void openMovieFragment(View view, int position) {
-        Log.d("Clicked on movie :", String.valueOf(moviesPassedFiltered.get(position)));
-        Bundle bundle = new Bundle();
-        bundle.putParcelable("data", moviesPassedFiltered.get(position));
-        AppCompatActivity activity = (AppCompatActivity) view.getContext();
-        MovieDetailsFragment myFragment = new MovieDetailsFragment();
-        myFragment.setArguments(bundle);
-        activity.getSupportFragmentManager().beginTransaction().add(R.id.container, myFragment).addToBackStack(null).commit();
+    public void setCallback(MovieFragmentData<Movie.ResultsBean> callback) {
+        this.callback = callback;
     }
 
     @Override
@@ -86,21 +77,44 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MyOwnHolde
                 }
             }
         }
+//        fragmentCommunication.respond(moviesPassedFiltered);
         Log.d("MoviesPassedFilter:", String.valueOf(moviesPassed.size()));
-
         Log.d("MoviesPassedFilteredF:", String.valueOf(moviesPassedFiltered.size()));
-
         notifyDataSetChanged();
+
     }
 
 
-    public void addAll(List<Movie.ResultsBean> movies) {
-        moviesPassed.addAll(movies);
-        Log.d("MoviesPassed:", String.valueOf(moviesPassed.size()));
-        if(movies==null){
-            Log.d("ALERT!!", "No more movies to display");
+    public List<Movie.ResultsBean> getMoviesPassedFiltered() {
+        return moviesPassedFiltered;
+    }
+
+    public void addAll(List<Movie.ResultsBean> movies, String category) {
+        if (category.equals(this.category)) {
+            moviesPassed.addAll(movies);
+            filter(filterDate);
+        } else {
+            int prevSize = moviesPassed.size();
+            moviesPassed.clear();
+            this.category = category;
+            moviesPassed.addAll(movies);
+            moviesPassedFiltered.clear();
+            moviesPassedFiltered.addAll(movies);
+            notifyItemRangeChanged(0, movies.size());
+            if (movies.size() < prevSize) {
+                notifyItemRangeRemoved(movies.size(), prevSize - movies.size());
+            } else {
+                notifyItemRangeInserted(movies.size(), movies.size() - prevSize);
+            }
         }
-        filter(filterDate);
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category=category;
     }
 
     class MyOwnHolder extends RecyclerView.ViewHolder {

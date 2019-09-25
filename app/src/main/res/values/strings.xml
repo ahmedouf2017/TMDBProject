@@ -3,4 +3,9 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="now_playing">Now Playing movies from TMDB</string>
+    <string name="popular">Popular movies from TMDB</string>
+    <string name="top_rated">Top Rated movies from TMDB</string>
+    <string name="upcoming">Upcoming movies from TMDB</string>
+
 </resources>
